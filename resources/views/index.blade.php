@@ -31,6 +31,7 @@
             </div>
         </div>
     </div>
+    {{-- End Header--}}
 
     {{-- Body --}}
     <div class="row border border-1 rounded p-1">
@@ -103,8 +104,7 @@
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" aria-label="Default select example" name="status" id="status">
-                        <option selected>Trạng thái</option>
-                        <option value="Hoạt động">Hoạt động</option>
+                        <option value="Hoạt động" selected>Hoạt động</option>
                         <option value="Ngừng hoạt động">Ngừng hoạt động</option>
                     </select>
                 </div>
@@ -116,7 +116,7 @@
         </div>
     </div>
 </div>
-<script>
+{{--<script>
     $(document).ready(function () {
 
         $.ajaxSetup({
@@ -127,6 +127,7 @@
 
         let html;
         let id = $('#id');
+        let titleModal = $('#titleModal');
         let idEdit;
         let idDelete;
         let name = $('#name');
@@ -137,24 +138,23 @@
         let status = $('#status');
         let btnClose = $('.btn-close');
 
-        $('.btnModal').click(function () {
+        // show modal create
+        $('#btnModalCreate').click(function () {
+            $('.modal-body').show();
             $('#titleModal').text($(this).text())
-            switch ($(this).attr('id')) {
-                case "btnModalCreate":
-                    $('.modal-body').show();
-                    id.val('');
-                    name.val('');
-                    phone.val('');
-                    email.val('');
-                    address.val('');
-                    master.val('');
-                    status.val('');
-                    $(".btnSubmit").text("Create");
-                    break;
-            }
+            id.val('');
+            name.val('');
+            phone.val('');
+            email.val('');
+            address.val('');
+            master.val('');
+            status.val(1);
+            $(".btnSubmit").text("Create");
         });
 
+        // show modal edit
         $('.btnModalEdit').click(function () {
+            titleModal.text($(this).text())
             $('.modal-body').show();
             idEdit = $(this).attr('id').slice(5);
             $(".btnSubmit").text("Save");
@@ -173,8 +173,9 @@
             });
         });
 
+        // show modal delete
         $('.btnModalDelete').click(function (){
-            $('.modal-title').text("Bạn có chắc muốn xóa đại lý này?");
+            titleModal.text("Bạn có chắc muốn xóa đại lý này?");
             $(".btnSubmit").text("Delete");
             idDelete = $(this).attr('id').slice(7);
             $('.modal-body').hide();
@@ -255,7 +256,6 @@
         });
 
     });
-
-</script>
+</script>--}}
 </body>
 </html>

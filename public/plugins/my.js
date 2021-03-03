@@ -8,6 +8,9 @@ $(document).ready(function () {
 
     let html;
     let id = $('#id');
+    let titleModal = $('#titleModal');
+    let idEdit;
+    let idDelete;
     let name = $('#name');
     let phone = $('#phone');
     let email = $('#email');
@@ -16,26 +19,25 @@ $(document).ready(function () {
     let status = $('#status');
     let btnClose = $('.btn-close');
 
-    $('.btnModal').click(function () {
+    // show modal create
+    $('#btnModalCreate').click(function () {
+        $('.modal-body').show();
         $('#titleModal').text($(this).text())
-        switch ($(this).attr('id')) {
-            case "btnModalCreate":
-                $('.modal-body').show();
-                id.val('');
-                name.val('');
-                phone.val('');
-                email.val('');
-                address.val('');
-                master.val('');
-                status.val('');
-                $(".btnSubmit").text("Create");
-                break;
-        }
+        id.val('');
+        name.val('');
+        phone.val('');
+        email.val('');
+        address.val('');
+        master.val('');
+        status.val(1);
+        $(".btnSubmit").text("Create");
     });
 
+    // show modal edit
     $('.btnModalEdit').click(function () {
+        titleModal.text($(this).text())
         $('.modal-body').show();
-        let idEdit = $(this).attr('id').slice(5);
+        idEdit = $(this).attr('id').slice(5);
         $(".btnSubmit").text("Save");
         $.ajax({
             url: window.origin + "/shop/read/" + idEdit,
@@ -52,10 +54,12 @@ $(document).ready(function () {
         });
     });
 
+    // show modal delete
     $('.btnModalDelete').click(function (){
-        $('.modal-body').hide();
-        $('.modal-title').text("Bạn có chắc muốn xóa đại lý này?");
+        titleModal.text("Bạn có chắc muốn xóa đại lý này?");
         $(".btnSubmit").text("Delete");
+        idDelete = $(this).attr('id').slice(7);
+        $('.modal-body').hide();
     });
 
     $('.btnSubmit').click(function () {
@@ -75,7 +79,7 @@ $(document).ready(function () {
                         status: status.val(),
                     },
                     success: function (res) {
-                        html = "<tr id=\"shop_"+res.id+"\">"
+                        html = "<tr id=\"shop_" + res.id + "\">"
                             + "<th scope=\"row\">" + res.id + "</th>"
                             + "<td>" + res.name + "</td>"
                             + "<td>" + res.phone + "</td>"
@@ -92,7 +96,7 @@ $(document).ready(function () {
                 break;
             case "Save":
                 $.ajax({
-                    url: window.origin + "/update",
+                    url: window.origin + "/shop/update",
                     method: 'POST',
                     data: {
                         id: id.val(),
@@ -115,16 +119,18 @@ $(document).ready(function () {
                             + "<button type=\"button\" class=\"btn btn-warning btnModalEdit btnModal\" id=\"edit_" + res.id + "\" data-bs-toggle=\"modal\" data-bs-target=\"#modal\">Edit</button>"
                             + "<button type=\"button\" class=\"btn btn-danger btnModalDelete btnModal\" id=\"delete_" + res.id + "\" data-bs-toggle=\"modal\" data-bs-target=\"#modal\">Delete</button>"
                             + "</td></tr>";
-                        $('#shop_'+res.id).html(html)
+                        $('#shop_'+res.id).remove();
+                        $('#shopList').append(html);
                     }
                 });
                 break;
             case "Delete":
                 $.ajax({
-                    url: window.origin + "/delete/".id.val(),
+                    url: window.origin + "/shop/delete/" + idDelete,
                     method: 'GET',
                     success: function (res) {
-                        $("#shop_".res).remove()
+                        console.log(res);
+                        $("#shop_" + idDelete).remove();
                     }
                 });
                 break;
